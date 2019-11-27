@@ -44,13 +44,11 @@ class NetworkService {
         
         for imageUrl in urls {
             loadingGroup.enter()
-            DispatchQueue(label: "loadingPicures", qos: .userInitiated, attributes: .concurrent).async {
-                URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
-                    guard let data = data, let image = UIImage(data: data) else { return }
-                    results.append(image)
-                    loadingGroup.leave()
-                }.resume()
-            }
+            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
+                guard let data = data, let image = UIImage(data: data) else { return }
+                results.append(image)
+                loadingGroup.leave()
+            }.resume()
         }
         
         loadingGroup.notify(queue: .main) {
